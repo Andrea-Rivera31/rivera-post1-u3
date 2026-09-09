@@ -4,7 +4,7 @@
 Repositorio del laboratorio de la Unidad 3 de Programación Web — Séptimo
 Semestre. Contiene dos partes: página de perfil con selectores CSS
 avanzados, Box Model y posicionamiento (`parte-1-perfil-css3/`) y dashboard
-responsivo con CSS Grid y Flexbox (`parte-2-dashboard-grid/`, en progreso).
+responsivo con CSS Grid y Flexbox (`parte-2-dashboard-grid/`).
 
 ## Parte 1 — Página de perfil
 Página de perfil personal que implementa selectores CSS avanzados,
@@ -15,9 +15,13 @@ formulario de contacto accesible con estados `:focus`. Ver
 `parte-1-perfil-css3/`.
 
 ## Parte 2 — Dashboard con Grid y Flexbox
-*Pendiente.* Esta sección se completará al finalizar la Parte 2 del
-laboratorio (dashboard responsivo con CSS Grid, Flexbox, colocación
-explícita de Grid y tabla con franjas zebra).
+Dashboard responsivo con layout principal en CSS Grid
+(`grid-template-areas`), sidebar y topbar en Flexbox, stat-cards con Grid
+`auto-fill` responsivo, panel de contenido en proporción 2fr/1fr con un
+tercer panel ("Notas del Sprint") posicionado mediante colocación
+explícita de Grid (`grid-column: 1 / -1`), y tabla de proyectos con
+franjas zebra vía `:nth-child(even)`. Sin frameworks CSS externos. Ver
+`parte-2-dashboard-grid/`.
 
 ## Decisiones de diseño
 
@@ -31,7 +35,14 @@ sin necesidad de `!important`, dejando ambas reglas conviviendo sin
 conflicto (evidencia en las capturas 07 y 08).
 
 ### Parte 2 — Breakpoint y estrategia de layout responsivo
-*Pendiente.* Se completará junto con el desarrollo de la Parte 2.
+Se eligió un breakpoint de **700px**, tras probar en DevTools que por
+debajo de ese ancho el sidebar fijo de 220px dejaba muy poco espacio para
+el contenido y el panel `2fr/1fr` se veía apretado. Se optó por la
+**estrategia Grid** (redefinir `grid-template-areas`) en vez de Flex
+porque conserva las áreas nombradas ya definidas en el Paso 2, evitando
+tener que reordenar visualmente sidebar/topbar/main con la propiedad
+`order`. La transición se verificó comparando el layout a 750px (normal)
+y a 700px (apilado) — ver capturas 18 y 19.
 
 ## Cómo visualizar el proyecto
 1. Clonar el repositorio: `git clone [URL-del-repo]`
@@ -95,3 +106,64 @@ Repositorio `rivera-post1-u3` con commits descriptivos de la Parte 1.
 **Vista completa de la página de perfil**
 
 ![Vista completa del perfil](parte-1-perfil-css3/img/Captura-10-vista-completa.png)
+
+## Capturas de pantalla — Parte 2
+
+**Paso 1 — HTML base del dashboard sin estilos**
+Esqueleto semántico (sidebar, topbar, stats, tabla, actividad, notas)
+abriendo sin errores, en flujo normal de bloque.
+
+![Dashboard sin estilos](parte-2-dashboard-grid/img/captura-11-paso1-html-sin-estilos.png)
+
+**Paso 2 — Grid principal de la aplicación**
+Overlay de Grid en DevTools mostrando las áreas "sidebar", "topbar" y
+"main" correctamente delimitadas mediante `grid-template-areas`.
+
+![Grid principal](parte-2-dashboard-grid/img/captura-12-paso2-grid-principal.png)
+
+**Paso 3 — Sidebar con Flexbox**
+Overlay de Flexbox confirmando `display: flex; flex-direction: column`
+en `.sidebar`, con los enlaces de navegación apilados verticalmente.
+
+![Sidebar con Flexbox](parte-2-dashboard-grid/img/captura-13-paso3-sidebar-flexbox.png)
+
+**Paso 4 — Topbar con Flexbox**
+Topbar estilizada con `justify-content: space-between`, botón "Exportar"
+y avatar circular alineados; las stat-cards ya muestran 2 columnas al
+reducir el ancho de la ventana.
+
+![Topbar estilizada](parte-2-dashboard-grid/img/captura-14-paso4-topbar-stats-2col.png)
+
+**Paso 5 — Stats row responsivo: 1 columna**
+En una ventana angosta, `repeat(auto-fill, minmax(200px, 1fr))` reorganiza
+automáticamente las 4 stat-cards en una sola columna, sin media queries.
+
+![Stats en 1 columna](parte-2-dashboard-grid/img/captura-15-paso5-stats-1col-movil.png)
+
+**Paso 5 y 6 — Stats row en 4 columnas + tabla con zebra striping**
+En escritorio, las 4 stat-cards se acomodan en una sola fila; la tabla de
+proyectos muestra franjas zebra alternadas (`App Mobile` con fondo gris
+claro) junto a los badges de estado con color.
+
+![Stats 4 columnas y tabla zebra](parte-2-dashboard-grid/img/captura-16-paso5-6-stats-4col-zebra.png)
+
+**Paso 6 — Colocación explícita de Grid (`.card--notes`)**
+Overlay de Grid sobre `.content-row` mostrando las líneas de columna 1,
+2 y 3, con el panel "Notas del Sprint" ocupando desde la línea 1 hasta la
+línea -1 en la fila inferior, debajo de los paneles principal y lateral.
+
+![Colocación explícita de Grid](parte-2-dashboard-grid/img/captura-17-paso6-content-row-grid.png)
+
+**Paso 7 — Antes del breakpoint (750px)**
+Layout normal: sidebar como columna angosta a la izquierda, stat-cards en
+2 columnas, sin apilar.
+
+![Antes del breakpoint](parte-2-dashboard-grid/img/captura-18-paso7-antes-breakpoint-750px.png)
+
+**Paso 7 — Breakpoint activo (700px): layout apilado**
+El sidebar cae como franja horizontal arriba del contenido; en el panel
+de Styles se ve la regla `@media (max-width: 700px)` sobrescribiendo la
+regla base de `.app-layout` (tachada), confirmando que la especificidad
+del media query gana correctamente.
+
+![Breakpoint apilado](parte-2-dashboard-grid/img/captura-19-paso7-breakpoint-apilado-700px.png)
